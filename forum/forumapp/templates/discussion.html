@@ -1,0 +1,99 @@
+{% extends 'basic.html' %}
+
+{% block title %} Дописи {% endblock %}
+
+{% block css %}
+{% endblock %}
+{% block body %} 
+<br>
+<div style="width:100%; padding:15px; margin:auto">
+    <div class="row">
+        <div style="width: 100%; padding: 3%">
+            <div class="card mb-4">
+                <div style="padding: 0.8%; margin-bottom:0; background-color:beige; border-bottom:1px solid black">
+                    <div class="media" style="align-items: center; flex-wrap: wrap; width: 100%;"> 
+                      <img src="/media/{{post.image}}" style="border-radius:50%; display:block" alt="" width="40px" height="40px">
+                      <div style="margin-left:1%; -ms-flex:1; flex:1; text-transform: uppercase"> 
+                        <a data-abc="true">{{post.user1}}</a>
+                      </div>
+                      <div style="color:gray; font-size:80%; margin: 0.05%;">
+                          <div>Дата та час :</div>
+                            <div>
+                              <strong>
+                                {{post.timestamp}}
+                              </strong>
+                            </div>
+                          </div>
+                      </div>
+                   </div>         
+                <div style="padding:1%">
+                    <p>{{post.post_content}}</p>
+                </div>
+                <div style="background-color:rgb(238, 248, 248); border-top:1px solid rgb(201, 195, 195); display:flex; flex-wrap:wrap">
+                  <div style="padding :1rem"> 
+                    <button type="button" class="btn btn-primary" data-target="#reply" data-toggle="modal">
+                      Reply
+                    </button>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% for reply in replies %}
+<br>
+<div style="border: 1px solid black; width: 90%; padding:15px; margin:auto">
+<div class="media">
+    <img style="margin-right:1rem; border-radius:50%; width:30px; height:30px" src="/media/{{reply.image}}" alt=".">
+    <div class="media-body">
+      <h4>
+        {{reply.user}} 
+        <span><small style="font-size: 10px;">({{reply.timestamp}})</small></span>
+      </h4>   
+      <h5>{{reply.reply_content}}</h5>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+<div class="modal fade" id="reply" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% if user.is_authenticated %}
+        <div class="modal-body">
+          <form action="/discussion/{{post.id}}/" method="POST"> {% csrf_token %}
+            <div class="form-group">
+              <label for="exampleFormControlTextarea1">Post Your Solution Here</label>
+              <input type="hidden" name="post_id" value="{{post.id}}">
+              <textarea class="form-control" id="desc" name="desc" rows="3"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Post Solution</button>
+          </div>
+          {% else %}
+          <h3>Please Login first to post a reply</h3>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+          {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block js %}
+<script>
+ {% if alert %}
+alert('Your Reply has been posted successfully!!');
+document.location = "/"
+{% endif %}
+</script>
+{% endblock %}
+
