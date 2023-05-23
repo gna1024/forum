@@ -5,10 +5,82 @@
 
 {% block css %}
 a {
-  color: #E91E63;
-  text-decoration: none !important;
-  background-color: transparent
+color: #E91E63;
+text-decoration: none;
+background-color: transparent;
 }
+
+/* Измененный CSS код */
+h1 {
+font-size: 2.5rem;
+color: #333;
+}
+
+p {
+font-size: 1.5rem;
+color: #555;
+}
+
+button {
+font-size: xx-large;
+position: relative;
+color: wheat;
+background-color: blueviolet;
+border-radius: 15%;
+}
+
+.card-header {
+background-color: #f8f9fa;
+padding: 0.75rem;
+}
+
+
+
+.media-body a {
+color: #333;
+font-weight: bold;
+}
+
+.text-muted.small {
+color: #888;
+}
+
+.row {
+border: 1px solid black;
+margin: 1%;
+}
+
+.modal-title {
+font-size: 1.25rem;
+font-weight: bold;
+color: #333;
+}
+
+textarea {
+font-size: 1rem;
+color: #333;
+}
+
+.btn-primary {
+background-color: #007bff;
+color: white;
+}
+
+.btn-secondary {
+background-color: #6c757d;
+color: white;
+}
+
+.btn-danger {
+background-color: #dc3545;
+color: white;
+}
+
+.btn-sm {
+padding: 0.25rem 0.5rem;
+font-size: 0.875rem;
+}
+
 {% endblock %}
 
 {% block body %}
@@ -16,23 +88,23 @@ a {
 
 <div>
   <div style="padding: 1rem; margin-bottom: 1rem; background-color: beige">
-    <h1 style="font-size: 2.5rem">Форум для спілкування</h1>
-    <p style="font-size: 1.5rem">Це форум, де ти можеш вирішити свої проблеми. Додай пост за допомогою кнопки знизу</p>
+    <h1>Форум для спілкування</h1>
+    <p>Ласкаво просимо до нашого форуму, місця, де ти можеш знайти відповіді на свої запитання та сам допомогти іншим. Тут був створений простір для обміну своїм досвідом та ідеями. Щоб додати свій коментар треба зареєструватись на сайті. Будь ласка, допомагай нам підтримувати дружню атмосферу. Приєднуйся до форуму прямо зараз та починай спілкування зі спільнотою.</p>
     <br>
     {% if user.is_staff %}
-    <button style="font-size: xx-large; position: relative; color: wheat; background-color: blueviolet; border-radius: 15%" data-target="#my_question" data-toggle="modal" role="button">Новий пост</button>
+    <button data-target="#my_question" data-toggle="modal" role="button">Новий пост</button>
     {% endif %}
   </div>
   <div style="margin: 1%; text-align: center;">
-    <h1>Всі пости</h1>
+    <h1>Всі теми форума</h1>
   </div>
   {% for post in posts %}
   <div class="row" style="border: 1px solid black; margin: 1%">
-    <div style="-ms-flex: 0 0 100%; flex: 0 0 100%; max-width: 100%">
+    <div style="-ms-flex: 0 0 100%; flex: 0 0 100%">
       <div>
         <div class="card-header">
           <div class="media flex-wrap w-100 align-items-center">
-            <img src="/media/{{ post.image }}" class="d-block ui-w-40 rounded-circle" style="width: 42px; height: auto" alt="Фото">
+            <img src="/media/{{ post.image }}" class="d-block ui-w-40 rounded-circle" style="width: 42px; height: 42px" alt="Фото">
             <div class="media-body ml-3">
               <a href="/discussion/{{ post.id }}" data-abc="true">{{ post.user1 }}</a>
             </div>
@@ -41,14 +113,14 @@ a {
             </div>
             {% if user.is_staff or user == post.user1 %}
             <div class="ml-auto">
-              <button class="btn btn-danger btn-sm" onclick="deletePost({{ post.id }})">Delete</button>
-              <button class="btn btn-primary btn-sm" onclick="editPost({{ post.id }})" data-target="#edit_post_modal" data-toggle="modal">Edit</button>
+              <button class="btn btn-danger btn-sm" onclick="deletePost({{ post.id }})">Видалити</button>
+              <button class="btn btn-primary btn-sm" onclick="editPost({{ post.id }})" data-target="#edit_post_modal" data-toggle="modal">Редагувати</button>
             </div>
             {% endif %}
           </div>
         </div>
         <div style="flex: 1 1 auto; padding: 1.25rem">
-          <p style="font-size: 13px">{{ post.post_content }}</p>
+          <p>{{ post.post_content }}</p>
         </div>
       </div>
     </div>
@@ -56,12 +128,11 @@ a {
   {% endfor %}
 </div>
 
-<!-- Modal -->
 <div class="modal fade" id="my_question" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New Post</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Новий пост</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -76,7 +147,7 @@ a {
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
-            <button type="submit" class="btn btn-primary">Post</button>
+            <button type="submit" class="btn btn-primary">Додати</button>
           </div>
         </form>
         {% else %}
@@ -90,91 +161,84 @@ a {
   </div>
 </div>
 
-<!-- Edit Post Modal -->
 <div class="modal fade" id="edit_post_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Edit Post</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Редагувати пост</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+          <span aria-hidden="true">×</span>
         </button>
       </div>
       <div class="modal-body">
         <form id="edit_post_form" action="/edit-post/" method="POST">
           {% csrf_token %}
           <div class="form-group">
-            <label for="edit_content">Post Content</label>
+            <label for="edit_content">Зміст посту</label>
             <textarea class="form-control" id="edit_content" name="edit_content" rows="3"></textarea>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
+            <button type="submit" class="btn btn-primary">Зберегти зміни</button>
           </div>
         </form>
       </div>
     </div>
   </div>
 </div>
-
 {% endblock %}
-
 {% block js %}
 <script>
-  function deletePost(postId) {
-    if (confirm("Are you sure you want to delete this post?")) {
-      // Send an AJAX request to delete the post
-      fetch('/delete-post/' + postId + '/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}'
-          },
-        })
-        .then(response => {
-          if (response.ok) {
-            // Post deleted successfully, reload the page
-            location.reload();
-          } else {
-            throw new Error('An error occurred while deleting the post. Please try again.');
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          alert(error.message);
-        });
-    }
-  }
-  
-  function editPost(postId) {
-    // Fetch the post content using AJAX
-    fetch('/get-post-content/' + postId + '/', {
-      method: 'GET',
+function deletePost(postId) {
+  if (confirm("Ви впевнені, що хочете видалити цей пост?")) {
+    fetch('/delete-post/' + postId + '/', {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': '{{ csrf_token }}'
-      }
+      },
     })
     .then(response => {
       if (response.ok) {
-        return response.json();
+        location.reload();
       } else {
-        throw new Error('An error occurred while fetching the post content. Please try again.');
+        throw new Error('Під час видалення поста сталася помилка. Будь ласка, спробуйте ще раз.');
       }
     })
-    .then(data => {
-      // Populate the edit post form with the fetched post content
-      document.getElementById('edit_content').value = data.post_content;
-      // Set the form action to include the post ID
-      document.getElementById('edit_post_form').action = '/edit-post/' + postId + '/';
-      // Open the edit post modal
-      $('#edit_post_modal').modal('show');
-    })
     .catch(error => {
-      console.error('Error:', error);
+      console.error('Помилка:', error);
       alert(error.message);
     });
   }
+}
+function editPost(postId) {
+  fetch('/get-post-content/' + postId + '/', {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-CSRFToken': '{{ csrf_token }}'
+  }
+})
+.then(response => {
+  if (response.ok) {
+    return response.json();
+  } else {
+    throw new Error('Під час отримання змісту поста сталася помилка. Будь ласка, спробуйте ще раз.');
+  }
+})
+.then(data => {
+  document.getElementById('edit_content').value = data.post_content;
+  document.getElementById('edit_post_form').action = '/edit-post/' + postId + '/';
+  $('#edit_post_modal').modal('show');
+})
+.catch(error => {
+  console.error('Помилка:', error);
+  alert(error.message);
+});
+}
 </script>
 {% endblock %}
-
+</pre>                
+</body>
+</html>
+                

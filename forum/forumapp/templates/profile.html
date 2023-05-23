@@ -4,7 +4,58 @@
 {% block profileactive %}active{% endblock profileactive %}
 
 {% block css %}
+body {
+    margin: 0;
+    padding: 0;
+    background: #DDD;
+    font-size: 16px;
+    color: #222;
+    font-weight: 300;
+}
+
+.container {
+    margin-top: 20px;
+}
+
+.panel-primary {
+    border-color: #337ab7;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.list-group-item {
+    padding: 10px;
+    border: none;
+    border-top: 1px solid #ddd;
+}
+
+.float-right {
+    float: right;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+button[type="submit"] {
+    margin-top: 10px;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background-color: #337ab7;
+    color: #fff;
+}
 {% endblock %}
+
 {% block body %}
 <br>
 {% for message in messages %}
@@ -27,16 +78,15 @@
                                     Username: <strong class="float-right">{{ request.user }}</strong>
                                 </li>
                                 <li class="list-group-item">
-                                    Full Name: <strong class="float-right">{{ request.user.get_full_name }}</strong>
-                                </li>
-                                <li class="list-group-item">
                                     Email: <strong class="float-right">{{ request.user.email }}</strong>
                                 </li>
                                 <li class="list-group-item">
                                     <form action="/myprofile/" enctype="multipart/form-data" method="POST">
                                         {% csrf_token %}
                                         {{ form.as_p }}
-                                        <button type="submit">Change</button>
+                                        <div class="form-group">
+                                            <button type="submit">Change</button>
+                                        </div>
                                     </form>
                                 </li>
                             </ul>

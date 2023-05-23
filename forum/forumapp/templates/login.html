@@ -15,8 +15,8 @@ body {
 #login-box {
   position: relative;
   margin: 5% auto;
-  width: 700px;
-  height: 500px;
+  width: 400px;
+  height: 300px;
   background: #FFF;
   border-radius: 2px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
@@ -28,8 +28,8 @@ body {
   left: 0;
   box-sizing: border-box;
   padding: 40px;
-  width: 700px;
-  height: 500px;
+  width: 400px;
+  height: 300px;
 }
 
 h1 {
@@ -45,7 +45,7 @@ input[type="password"] {
   box-sizing: border-box;
   margin-bottom: 20px;
   padding: 4px;
-  width: 600px;
+  width: 300px;
   height: 32px;
   border: none;
   border-bottom: 1px solid #AAA;
@@ -76,7 +76,7 @@ input[type="submit"] {
   transition: 0.1s ease;
   cursor: pointer;
   position: relative;
-  left: 250px;
+  left: 90px;
 }
 
 input[type="submit"]:hover,
@@ -96,9 +96,9 @@ input[type="submit"]:active {
 {% block body %} 
 {% for message in messages  %}            
 <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-  <strong>Message : </strong> {{ message }}
+  <strong>Message:</strong> {{ message }}
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
+    <span aria-hidden="true">×</span>
   </button>
 </div>
 {% endfor %}   
@@ -106,9 +106,9 @@ input[type="submit"]:active {
   <div class="items">
     <h1>Вхід в акаунт</h1>
     <form action="/login/" method="post"> {% csrf_token %}
-    <input type="text" name="username" placeholder="Username" />
-    <input type="password" name="password" placeholder="Password" />      
-    <input type="submit" name="signup_submit" value="Log In" />
+    <input type="text" name="username" placeholder="Ім'я користувача" />
+    <input type="password" name="password" placeholder="Пароль" />      
+    <input type="submit" name="signup_submit" value="Увійти" />
   </div>   
 </div>
-{% endblock %}
+{% endblock %}    

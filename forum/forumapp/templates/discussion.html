@@ -1,99 +1,147 @@
 {% extends 'basic.html' %}
 
-{% block title %} Дописи {% endblock %}
+{% block title %}Дописи{% endblock %}
 
 {% block css %}
+
+<style>
+  .post-card {
+    padding: 0.8%;
+    margin-bottom: 0;
+    background-color: beige;
+    border-bottom: 1px solid black;
+  }
+
+  .post-card .media {
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .post-card .media img {
+    border-radius: 50%;
+    display: block;
+  }
+
+  .post-card .media .username {
+    margin-left: 1%;
+    -ms-flex: 1;
+    flex: 1;
+    text-transform: uppercase;
+  }
+
+  .post-card .timestamp {
+    color: gray;
+    font-size: 80%;
+    margin: 0.05%;
+  }
+
+  .post-card .reply-button {
+    padding: 1rem;
+  }
+
+  .reply-card {
+    border: 1px solid black;
+    width: 90%;
+    padding: 15px;
+    margin: auto;
+  }
+
+  .reply-card .media img {
+    margin-right: 1rem;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+  }
+</style>
 {% endblock %}
-{% block body %} 
+
+{% block body %}
 <br>
+
 <div style="width:100%; padding:15px; margin:auto">
-    <div class="row">
-        <div style="width: 100%; padding: 3%">
-            <div class="card mb-4">
-                <div style="padding: 0.8%; margin-bottom:0; background-color:beige; border-bottom:1px solid black">
-                    <div class="media" style="align-items: center; flex-wrap: wrap; width: 100%;"> 
-                      <img src="/media/{{post.image}}" style="border-radius:50%; display:block" alt="" width="40px" height="40px">
-                      <div style="margin-left:1%; -ms-flex:1; flex:1; text-transform: uppercase"> 
-                        <a data-abc="true">{{post.user1}}</a>
-                      </div>
-                      <div style="color:gray; font-size:80%; margin: 0.05%;">
-                          <div>Дата та час :</div>
-                            <div>
-                              <strong>
-                                {{post.timestamp}}
-                              </strong>
-                            </div>
-                          </div>
-                      </div>
-                   </div>         
-                <div style="padding:1%">
-                    <p>{{post.post_content}}</p>
-                </div>
-                <div style="background-color:rgb(238, 248, 248); border-top:1px solid rgb(201, 195, 195); display:flex; flex-wrap:wrap">
-                  <div style="padding :1rem"> 
-                    <button type="button" class="btn btn-primary" data-target="#reply" data-toggle="modal">
-                      Reply
-                    </button>
-                  </div>
-                </div>
+  <div class="row">
+    <div style="width: 100%; padding: 3%">
+      <div class="card mb-4">
+        <div class="post-card">
+          <div class="media">
+            <img src="/media/{{post.image}}" alt="" width="40px" height="40px">
+            <div class="username">
+              <a data-abc="true">{{post.user1}}</a>
             </div>
+            <div class="timestamp">
+              <div>Дата та час:</div>
+              <div><strong>{{post.timestamp}}</strong></div>
+            </div>
+          </div>
         </div>
+        <div style="padding:1%">
+          <p>{{post.post_content}}</p>
+        </div>
+        <div style="background-color:rgb(238, 248, 248); border-top:1px solid rgb(201, 195, 195); display:flex; flex-wrap:wrap">
+          <div class="reply-button">
+            <button type="button" class="btn btn-primary" data-target="#reply" data-toggle="modal">
+              Відповісти
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 {% for reply in replies %}
 <br>
-<div style="border: 1px solid black; width: 90%; padding:15px; margin:auto">
-<div class="media">
-    <img style="margin-right:1rem; border-radius:50%; width:30px; height:30px" src="/media/{{reply.image}}" alt=".">
+<div class="reply-card">
+  <div class="media">
+    <img src="/media/{{reply.image}}" alt="." class="mr-3">
     <div class="media-body">
-      <h4>
-        {{reply.user}} 
-        <span><small style="font-size: 10px;">({{reply.timestamp}})</small></span>
-      </h4>   
+      <h4>{{reply.user}} <span><small style="font-size: 10px;">({{reply.timestamp}})</small></span></h4>
       <h5>{{reply.reply_content}}</h5>
     </div>
   </div>
 </div>
 {% endfor %}
-
 <div class="modal fade" id="reply" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <h5 class="modal-title" id="exampleModalLabel">Необхідна реєстрація</h5>
+        <button type="button" class="close" data-dismiss="modal"aria-label="Close">
+          <span aria-hidden="true">×</span>
         </button>
       </div>
       {% if user.is_authenticated %}
-        <div class="modal-body">
-          <form action="/discussion/{{post.id}}/" method="POST"> {% csrf_token %}
-            <div class="form-group">
-              <label for="exampleFormControlTextarea1">Post Your Solution Here</label>
-              <input type="hidden" name="post_id" value="{{post.id}}">
-              <textarea class="form-control" id="desc" name="desc" rows="3"></textarea>
-            </div>
+      <div class="modal-body">
+        <form action="{{ request.path }}" method="POST">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">Додай тут свою відповідь</label>
+            <input type="hidden" name="post_id" value="{{post.id}}">
+            <textarea class="form-control" id="desc" name="desc" rows="3"></textarea>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Post Solution</button>
-          </div>
-          {% else %}
-          <h3>Please Login first to post a reply</h3>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          </div>
-          {% endif %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
+          <button type="submit" class="btn btn-primary">Додати відповідь</button>
+        </div>
+      </form>
+      {% else %}
+      <h3 style="padding-left: 2%;">Спочатку треба зареєструватись</h3>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
       </div>
+      {% endif %}
     </div>
   </div>
+</div>
 {% endblock %}
 {% block js %}
+
 <script>
- {% if alert %}
-alert('Your Reply has been posted successfully!!');
+{% if alert %}
+alert('Відповідь додано!');
 document.location = "/"
 {% endif %}
 </script>
-{% endblock %}
 
+{% endblock %}

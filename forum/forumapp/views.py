@@ -2,13 +2,14 @@ from django.shortcuts import render, redirect, HttpResponse, Http404
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from .models import Post, Replie, Profile
 from .forms import ProfileForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.http import require_GET
+from django.shortcuts import render
+from .models import Post, Reply, Profile
 
 
 def forum(request):
@@ -21,24 +22,28 @@ def forum(request):
         post.save()
         alert = True
         posts = Post.objects.filter().order_by('-timestamp')  # Retrieve the posts again
-        return render(request, "forum.html", {'alert': alert, 'posts': posts})
+        return redirect('Forum')
     posts = Post.objects.filter().order_by('-timestamp')
     return render(request, "forum.html", {'posts': posts})
 
 
+
 def discussion(request, myid):
     post = Post.objects.filter(id=myid).first()
-    replies = Replie.objects.filter(post=post)
+    replies = Reply.objects.filter(post=post)
     if request.method == "POST":
         user = request.user
-        image = request.user.profile.image
+        if hasattr(user, 'profile'):
+            image = user.profile.image
+        else:
+            image = "/path/to/default/image.png"  # Provide a default image URL
         desc = request.POST.get('desc', '')
-        post_id = request.POST.get('post_id', '')
-        reply = Replie(user=user, reply_content=desc, post=post, image=image)
+        reply = Reply(user=user, reply_content=desc, post=post, image=image)
         reply.save()
         alert = True
-        return render(request, "discussion.html", {'alert': alert})
+        return redirect(request.path)
     return render(request, "discussion.html", {'post': post, 'replies': replies})
+
 
 def UserRegister(request):
     if request.method == "POST":
